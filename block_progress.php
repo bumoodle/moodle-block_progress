@@ -237,6 +237,13 @@ class block_progress extends block_base {
                 $options = array('class' => 'overviewButton');
                 $this->content->text .= $OUTPUT->single_button($url, $label, 'post', $options);
             }
+
+            // Add a "project my grade" link to the end of the report.
+            $project_url = new moodle_url('/grade/report/projected/index.php', array('id' => $COURSE->id));
+            $this->content->text .= html_writer::start_tag('div', array('id' => 'projectfinal'));
+            $this->content->text .= html_writer::link($project_url, get_string('projectfinal', 'block_progress'));
+            $this->content->text .= html_writer::end_tag('div');
+
         }
 
         // Organise access to JS.

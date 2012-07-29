@@ -169,7 +169,7 @@ $tableheaders = array(
 $table->define_headers($tableheaders);
 $table->sortable(true);
 
-$table->set_attribute('class', 'generalbox');
+$table->set_attribute('class', 'generalbox generaltable');
 $table->column_style_all('padding', '5px 10px');
 $table->column_style_all('text-align', 'left');
 $table->column_style_all('vertical-align', 'middle');

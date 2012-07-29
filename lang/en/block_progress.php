@@ -161,10 +161,10 @@ $string['pluginname'] = 'Progress Bar';
 $string['selectitemstobeadded'] = 'Select activities/resources';
 $string['time_expected'] = 'Expected';
 
-// Default colours that may have different cultural meanings.
-$string['attempted_colour'] = '#5CD85C';
-$string['notAttempted_colour'] = '#FF5C5C';
-$string['futureNotAttempted_colour'] = '#5C5CFF';
+// Default colours that may have different cultural meanings
+$string['attempted_colour'] = '#54be46';
+$string['notAttempted_colour'] = '#f17c0e';
+$string['futureNotAttempted_colour'] = '#cccccc';
 
 $string['attempted_colour_title'] = 'Attempted Colour';
 $string['attempted_colour_descr'] = 'HTML Colour code for elements that have been attempted';
@@ -189,3 +189,6 @@ $string['cachedef_cachedlogs'] = 'Progress Bar log query caching';
 
 // For My home page
 $string['no_blocks'] = "No Progress Bar blocks are set up for your courses.";
+
+// Allow the student to view their projected final grade.
+$string['projectfinal'] = 'Estimate my Final Grade...';
