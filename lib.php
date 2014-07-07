@@ -854,9 +854,10 @@ function block_progress_attempts($modules, $config, $events, $userid, $course) {
  * @param int      instance  The block instance (in case more than one is being displayed)
  * @param array    $attempts The user's attempts on course activities
  * @param bool     $simple   Controls whether instructions are shown below a progress bar
+ * @param bool     $separateinfo If true, the return value will be an array in the format (main content, information div), instead of a HTML snippet.
  * @return string  Progress Bar HTML content
  */
-function block_progress_bar($modules, $config, $events, $userid, $instance, $attempts, $course, $simple = false) {
+function block_progress_bar($modules, $config, $events, $userid, $instance, $attempts, $course, $simple = false, $separateinfo = false) {
     global $OUTPUT, $CFG;
     $now = time();
     $numevents = count($events);
@@ -957,16 +958,16 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     // Add the info box below the table.
     $divoptions = array('class' => 'progressEventInfo',
                         'id' => 'progressBarInfo'.$instance.'-'.$userid.'-info');
-    $content .= HTML_WRITER::start_tag('div', $divoptions);
+    $infodiv = HTML_WRITER::start_tag('div', $divoptions);
     if (!$simple) {
         if (isset($config->showpercentage) && $config->showpercentage == 1) {
             $progress = block_progress_percentage($events, $attempts);
-            $content .= get_string('progress', 'block_progress').': ';
-            $content .= $progress.'%'.HTML_WRITER::empty_tag('br');
+            $infodiv .= get_string('progress', 'block_progress').': ';
+            $infodiv .= $progress.'%'.HTML_WRITER::empty_tag('br');
         }
-        $content .= get_string('mouse_over_prompt', 'block_progress');
+        $infodiv .= get_string('mouse_over_prompt', 'block_progress');
     }
-    $content .= HTML_WRITER::end_tag('div');
+    $infodiv .= HTML_WRITER::end_tag('div');
 
     // Add hidden divs for activity information.
     $displaydate = (!isset($config->orderby) || $config->orderby == 'orderbytime') &&
@@ -979,25 +980,32 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
         $divoptions = array('class' => 'progressEventInfo',
                             'id' => 'progressBarInfo'.$instance.'-'.$userid.'-'.$event['cm']->id,
                             'style' => 'display: none;');
-        $content .= HTML_WRITER::start_tag('div', $divoptions);
+        $infodiv .= HTML_WRITER::start_tag('div', $divoptions);
         $link = '/mod/'.$event['type'].'/view.php?id='.$event['cm']->id;
         $text = $OUTPUT->pix_icon('icon', '', $event['type'], array('class' => 'moduleIcon')).s($event['name']);
-        $content .= $OUTPUT->action_link($link, $text);
-        $content .= HTML_WRITER::empty_tag('br');
-        $content .= get_string($action, 'block_progress').'&nbsp;';
+        $infodiv .= $OUTPUT->action_link($link, $text);
+        $infodiv .= HTML_WRITER::empty_tag('br');
+        $infodiv .= get_string($action, 'block_progress').'&nbsp;';
         $icon = ($attempted ? 'tick' : 'cross');
-        $content .= $OUTPUT->pix_icon($icon, '', 'block_progress');
-        $content .= HTML_WRITER::empty_tag('br');
+        $infodiv .= $OUTPUT->pix_icon($icon, '', 'block_progress');
+        $infodiv .= HTML_WRITER::empty_tag('br');
         if ($displaydate) {
-            $content .= HTML_WRITER::start_tag('div', array('class' => 'expectedBy'));
-            $content .= get_string('time_expected', 'block_progress').': ';
-            $content .= userdate($event['expected'], $dateformat, $CFG->timezone);
-            $content .= HTML_WRITER::end_tag('div');
+            $infodiv .= HTML_WRITER::start_tag('div', array('class' => 'expectedBy'));
+            $infodiv .= get_string('time_expected', 'block_progress').': ';
+            $infodiv .= userdate($event['expected'], $dateformat, $CFG->timezone);
+            $infodiv .= HTML_WRITER::end_tag('div');
         }
-        $content .= HTML_WRITER::end_tag('div');
+        $infodiv .= HTML_WRITER::end_tag('div');
     }
 
-    return $content;
+    // If separate outputs have been requrested, return those outputs...
+    if($separateinfo) {
+      return array($content, $infodiv);
+    }
+    // ... otherwise, return a HTML snippet.
+    else {
+      return $content.$infodiv;
+    }
 }
 
 /**

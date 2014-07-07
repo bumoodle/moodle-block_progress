@@ -157,13 +157,14 @@ $numberofusers = count($users);
 
 // Setup submissions table.
 $table = new flexible_table('mod-block-progress-overview');
-$tablecolumns = array('picture', 'fullname', 'lastonline', 'progressbar', 'progress');
+$tablecolumns = array('picture', 'fullname', 'lastonline', 'progressbar', 'activityinfo', 'progress');
 $table->define_columns($tablecolumns);
 $tableheaders = array(
                   '',
                   get_string('fullname'),
                   get_string('lastonline', 'block_progress'),
                   get_string('progressbar', 'block_progress'),
+                  get_string('activityinfo', 'block_progress'),
                   get_string('progress', 'block_progress')
                 );
 $table->define_headers($tableheaders);
@@ -174,6 +175,7 @@ $table->column_style_all('padding', '5px 10px');
 $table->column_style_all('text-align', 'left');
 $table->column_style_all('vertical-align', 'middle');
 $table->column_style('progressbar', 'width', '200px');
+$table->column_style('activityinfo', 'width', '200px');
 $table->column_style('progress', 'text-align', 'center');
 
 $table->no_sorting('picture');
@@ -193,8 +195,7 @@ for ($i = 0; $i < $numberofusers; $i++) {
     }
     $userevents = block_progress_filter_groupings($events, $users[$i]->id);
     $attempts = block_progress_attempts($modules, $progressconfig, $userevents, $users[$i]->id, $course->id);
-    $progressbar = block_progress_bar($modules, $progressconfig, $userevents, $users[$i]->id, $progressblock->id, $attempts,
-        $course->id, true);
+    list($progressbar, $activityinfo) = block_progress_bar($modules, $progressconfig, $userevents, $users[$i]->id, $progressblock->id, $attempts, $course->id, true, true);
     $progressvalue = block_progress_percentage($userevents, $attempts, true);
     $progress = $progressvalue.'%';
 
@@ -206,6 +207,7 @@ for ($i = 0; $i < $numberofusers; $i++) {
         'lastonlinetime' => $users[$i]->lastaccess,
         'lastonline' => $lastonline,
         'progressbar' => $progressbar,
+        'activityinfo' => $activityinfo,
         'progressvalue' => $progressvalue,
         'progress' => $progress
     );
@@ -219,7 +221,7 @@ if ($numberofusers > 0) {
     usort($rows, 'block_progress_compare_rows');
     foreach ($rows as $row) {
         $table->add_data(array($row['picture'], $row['fullname'], $row['lastonline'],
-            $row['progressbar'], $row['progress']));
+            $row['progressbar'], $row['activityinfo'], $row['progress']));
     }
 }
 $table->print_initials_bar();

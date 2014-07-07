@@ -150,6 +150,7 @@ $string['how_ordering_works_help'] = '
 ';
 
 // Other terms.
+$string['activityinfo'] = 'Activity Information';
 $string['addallcurrentitems'] = 'Add all activities/resources';
 $string['date_format'] = '%a %d %b, %I:%M %p';
 $string['mouse_over_prompt'] = 'Mouse over block for info.';
@@ -192,3 +193,5 @@ $string['no_blocks'] = "No Progress Bar blocks are set up for your courses.";
 
 // Allow the student to view their projected final grade.
 $string['projectfinal'] = 'Estimate my Final Grade...';
+
+

@@ -26,8 +26,8 @@
 
 $plugin->version  = 2014062400;
 $plugin->requires = 2010121000;
-$plugin->maturity = 200;
+$plugin->maturity = MATURITY_STABLE;
 $plugin->release  = 'Version for Moodle 2.x';
 $plugin->dependencies = array(
-    'gradereport_projected' => 2012021500;
+    'gradereport_projected' => 2012021500
 );
